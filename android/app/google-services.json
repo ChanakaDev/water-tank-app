@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "709682489171",
+    "firebase_url": "https://esp8266-ad78c-default-rtdb.firebaseio.com",
+    "project_id": "esp8266-ad78c",
+    "storage_bucket": "esp8266-ad78c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709682489171:android:c6cd7a89aefca1a7ee63a6",
+        "android_client_info": {
+          "package_name": "com.example.water_tank_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709682489171-b4kbtrt12l7h52f5r5v37vo7pd3htgo2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBd3s8BVkActDxolvlO45xbItWbVrwFSdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709682489171-b4kbtrt12l7h52f5r5v37vo7pd3htgo2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
