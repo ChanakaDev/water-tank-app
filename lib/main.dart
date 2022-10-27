@@ -4,6 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import 'app_name_area.dart';
+import 'usage_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -43,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _dailyConsumption = "result goes here";
 
   bool isWaterPumpTurnedOn = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -51,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _getClearity();
     _getSpeed();
     _getDailyConsumption();
+
     super.initState();
   }
 
@@ -145,6 +150,10 @@ class _HomeScreenState extends State<HomeScreen> {
           _dailyConsumption = snapshot.value.toString();
         });
 
+        setState(() {
+          isLoading = false;
+        });
+
         print(snapshot.value);
       } else {
         print('No data available.');
@@ -173,123 +182,137 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // App name row
-          Container(
-            padding: const EdgeInsets.only(
-                left: 32.0, right: 32.0, top: 32.0, bottom: 16.0),
-            child: Image.asset('assets/images/title_area@2x.png'),
-          ),
-          // Image row
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3), // changes position of shadow
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                // App name row
+                AppNameArea(
+                  imagePath: "assets/images/title_area@2x.png",
                 ),
-              ],
-            ),
-            margin: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15.0),
-              child: Image.asset('assets/images/image@2x.png'),
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          // Parameters row
-          parameterRowBuilder(
-            "assets/images/icon_1@2x.png",
-            "Water capacity",
-            _waterCapacity,
-            false,
-            true,
-            false,
-            false,
-          ),
-          parameterRowBuilder(
-            "assets/images/icon_2@2x.png",
-            "Temperature",
-            _temperture,
-            false,
-            false,
-            true,
-            false,
-          ),
-          parameterRowBuilder(
-            "assets/images/icon_3@2x.png",
-            "Clearity",
-            _clearity,
-            true,
-            false,
-            false,
-            false,
-          ),
-          parameterRowBuilder(
-            "assets/images/icon_4@2x.png",
-            "Speed",
-            _speed,
-            false,
-            false,
-            false,
-            true,
-          ),
-          parameterRowBuilder(
-            "assets/images/icon_5@2x.png",
-            "Daily consumption",
-            _dailyConsumption,
-            false,
-            true,
-            false,
-            false,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          // Water pump button row
-          waterPumpButtonBuilder(),
-          // Bottom navigation button row
-          const SizedBox(
-            height: 30,
-          ),
-          Expanded(
-            child: Container(
-              height: 80,
-              color: const Color(0xff383F85),
-              child: Row(
-                // ignore: prefer_const_literals_to_create_immutables
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Usage per hour",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
+                // Image row
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15.0),
+                    child: Image.asset('assets/images/image@2x.png'),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                // Parameters row
+                parameterRowBuilder(
+                  "assets/images/icon_1@2x.png",
+                  "Water capacity",
+                  _waterCapacity,
+                  false,
+                  true,
+                  false,
+                  false,
+                ),
+                parameterRowBuilder(
+                  "assets/images/icon_2@2x.png",
+                  "Temperature",
+                  _temperture,
+                  false,
+                  false,
+                  true,
+                  false,
+                ),
+                parameterRowBuilder(
+                  "assets/images/icon_3@2x.png",
+                  "Clearity",
+                  _clearity,
+                  true,
+                  false,
+                  false,
+                  false,
+                ),
+                parameterRowBuilder(
+                  "assets/images/icon_4@2x.png",
+                  "Speed",
+                  _speed,
+                  false,
+                  false,
+                  false,
+                  true,
+                ),
+                parameterRowBuilder(
+                  "assets/images/icon_5@2x.png",
+                  "Daily consumption",
+                  _dailyConsumption,
+                  false,
+                  true,
+                  false,
+                  false,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                // Water pump button row
+                waterPumpButtonBuilder(),
+                // Bottom navigation button row
+                const SizedBox(
+                  height: 30,
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      print("Usage per hour button is clicked!");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UsageScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 80,
+                      color: const Color(0xff383F85),
+                      child: Row(
+                        // ignore: prefer_const_literals_to_create_immutables
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Usage per hour",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 8),
+                            width: 25,
+                            child: Image.asset('assets/images/history@2x.png'),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 8),
-                    width: 25,
-                    child: Image.asset('assets/images/history@2x.png'),
-                  ),
-                ],
-              ),
+                )
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
