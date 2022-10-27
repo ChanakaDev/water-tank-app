@@ -196,26 +196,46 @@ class _HomeScreenState extends State<HomeScreen> {
             "assets/images/icon_1@2x.png",
             "Water capacity",
             _waterCapacity,
+            false,
+            true,
+            false,
+            false,
           ),
           parameterRowBuilder(
             "assets/images/icon_2@2x.png",
             "Temperature",
             _temperture,
+            false,
+            false,
+            true,
+            false,
           ),
           parameterRowBuilder(
             "assets/images/icon_3@2x.png",
             "Clearity",
             _clearity,
+            true,
+            false,
+            false,
+            false,
           ),
           parameterRowBuilder(
             "assets/images/icon_4@2x.png",
             "Speed",
             _speed,
+            false,
+            false,
+            false,
+            true,
           ),
           parameterRowBuilder(
             "assets/images/icon_5@2x.png",
             "Daily consumption",
             _dailyConsumption,
+            false,
+            true,
+            false,
+            false,
           ),
           const SizedBox(
             height: 8,
@@ -295,6 +315,10 @@ class _HomeScreenState extends State<HomeScreen> {
     String imagePath,
     String parameterName,
     String valueFromBackend,
+    bool isClearity,
+    bool isLiquid,
+    bool isTempreature,
+    bool isSpeed,
   ) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
@@ -336,16 +360,101 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 16,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: Text(
-                          valueFromBackend,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF383F85)),
-                        ),
-                      ),
+                      isClearity
+                          ? valueFromBackend == '1'
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    border: Border.all(
+                                      color: Colors.green,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  margin: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 4,
+                                  ),
+                                  child: const Text(
+                                    "Good",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    border: Border.all(
+                                      color: Colors.red,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  margin: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 4,
+                                  ),
+                                  child: const Text(
+                                    "Bad",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                          : isLiquid
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 16.0),
+                                  child: Text(
+                                    "$valueFromBackend L",
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF383F85)),
+                                  ),
+                                )
+                              : isTempreature
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: Text(
+                                        "$valueFromBackend °C",
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF383F85)),
+                                      ))
+                                  : isSpeed
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 16.0),
+                                          child: Text(
+                                            "$valueFromBackend L/min",
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFF383F85)),
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 16.0),
+                                          child: Text(
+                                            valueFromBackend,
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFF383F85)),
+                                          ),
+                                        ),
                     ],
                   ),
                 )
