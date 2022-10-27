@@ -1,8 +1,12 @@
 // ignore_for_file: avoid_print
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -30,6 +34,124 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _database = FirebaseDatabase.instance.ref();
+
+  String _waterCapacity = "result goes here";
+  String _temperture = "result goes here";
+  String _clearity = "result goes here";
+  String _speed = "result goes here";
+  String _dailyConsumption = "result goes here";
+
+  @override
+  void initState() {
+    _getWaterCapacity();
+    _getTemperture();
+    _getClearity();
+    _getSpeed();
+    _getDailyConsumption();
+    super.initState();
+  }
+
+  // Water capacity
+  void _getWaterCapacity() async {
+    print("Inside the active listner");
+    try {
+      final snapshot = await _database.child('/Water_capacity').get();
+
+      if (snapshot.exists) {
+        setState(() {
+          _waterCapacity = snapshot.value.toString();
+        });
+
+        print(snapshot.value);
+      } else {
+        print('No data available.');
+      }
+    } catch (e) {
+      print("Error $e");
+    }
+  }
+
+  // Tempreature
+  void _getTemperture() async {
+    print("Inside the active listner");
+    try {
+      final snapshot = await _database.child('/temperature').get();
+
+      if (snapshot.exists) {
+        setState(() {
+          _temperture = snapshot.value.toString();
+        });
+
+        print(snapshot.value);
+      } else {
+        print('No data available.');
+      }
+    } catch (e) {
+      print("Error $e");
+    }
+  }
+
+  // Clearity
+  void _getClearity() async {
+    print("Inside the active listner");
+    try {
+      final snapshot = await _database.child('/clearity').get();
+
+      if (snapshot.exists) {
+        setState(() {
+          _clearity = snapshot.value.toString();
+        });
+
+        print(snapshot.value);
+      } else {
+        print('No data available.');
+      }
+    } catch (e) {
+      print("Error $e");
+    }
+  }
+
+  // Speed
+  void _getSpeed() async {
+    print("Inside the active listner");
+    try {
+      final snapshot = await _database.child('/speed').get();
+
+      if (snapshot.exists) {
+        setState(() {
+          _speed = snapshot.value.toString();
+        });
+
+        print(snapshot.value);
+      } else {
+        print('No data available.');
+      }
+    } catch (e) {
+      print("Error $e");
+    }
+  }
+
+  // Daily consumption
+  void _getDailyConsumption() async {
+    print("Inside the active listner");
+    try {
+      final snapshot = await _database.child('/daily_consumption').get();
+
+      if (snapshot.exists) {
+        setState(() {
+          _dailyConsumption = snapshot.value.toString();
+        });
+
+        print(snapshot.value);
+      } else {
+        print('No data available.');
+      }
+    } catch (e) {
+      print("Error $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,22 +195,27 @@ class _HomeScreenState extends State<HomeScreen> {
           parameterRowBuilder(
             "assets/images/icon_1@2x.png",
             "Water capacity",
+            _waterCapacity,
           ),
           parameterRowBuilder(
             "assets/images/icon_2@2x.png",
             "Temperature",
+            _temperture,
           ),
           parameterRowBuilder(
             "assets/images/icon_3@2x.png",
             "Clearity",
+            _clearity,
           ),
           parameterRowBuilder(
             "assets/images/icon_4@2x.png",
             "Speed",
+            _speed,
           ),
           parameterRowBuilder(
             "assets/images/icon_5@2x.png",
             "Daily consumption",
+            _dailyConsumption,
           ),
           const SizedBox(
             height: 8,
@@ -167,6 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Padding parameterRowBuilder(
     String imagePath,
     String parameterName,
+    String valueFromBackend,
   ) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
@@ -197,13 +325,30 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Image.asset(imagePath),
                   ),
                 ),
-                Text(
-                  parameterName,
-                  style: const TextStyle(
-                    color: Color(0xff383F85),
-                    fontSize: 16,
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        parameterName,
+                        style: const TextStyle(
+                          color: Color(0xff383F85),
+                          fontSize: 16,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(
+                          valueFromBackend,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF383F85)),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               ],
             ),
           ),
