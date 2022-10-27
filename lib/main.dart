@@ -42,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String _speed = "result goes here";
   String _dailyConsumption = "result goes here";
 
+  bool isWaterPumpTurnedOn = false;
+
   @override
   void initState() {
     _getWaterCapacity();
@@ -150,6 +152,22 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print("Error $e");
     }
+  }
+
+  void _turnOnWaterPump() {
+    print("Inside the turn on water pump button");
+    _database.child('/PUMP_turn_on_button').set(1);
+    setState(() {
+      isWaterPumpTurnedOn = true;
+    });
+  }
+
+  void _turnOffWaterPump() {
+    print("Inside the turn on water pump button");
+    _database.child('/PUMP_turn_on_button').set(0);
+    setState(() {
+      isWaterPumpTurnedOn = false;
+    });
   }
 
   @override
@@ -278,13 +296,17 @@ class _HomeScreenState extends State<HomeScreen> {
   InkWell waterPumpButtonBuilder() {
     return InkWell(
       onTap: () {
-        print("Button clicked");
+        if (isWaterPumpTurnedOn == true) {
+          _turnOffWaterPump();
+        } else {
+          _turnOnWaterPump();
+        }
       },
       child: Container(
         height: 50,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color(0xff435E82),
+          color: isWaterPumpTurnedOn ? const Color(0xff435E82) : Colors.red,
           border: Border.all(
             color: const Color(0xff435E82),
           ),
@@ -298,10 +320,12 @@ class _HomeScreenState extends State<HomeScreen> {
           top: 8.0,
         ),
         // color: const Color(0xff435E82),
-        child: const Center(
+        child: Center(
           child: Text(
-            "Water pump (Turn ON)",
-            style: TextStyle(
+            isWaterPumpTurnedOn
+                ? "Water pump (Turn ON)"
+                : "Water pump (Turn OFF)",
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16.0,
             ),
