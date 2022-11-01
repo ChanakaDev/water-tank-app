@@ -5,7 +5,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'app_name_area.dart';
-import 'usage_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -179,140 +178,132 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future loadDataAgain() async {
+    // Load data again
+    _getWaterCapacity();
+    _getTemperture();
+    _getClearity();
+    _getSpeed();
+    _getDailyConsumption();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30.0),
+        child: AppBar(
+          backgroundColor: Colors.white,
+        ),
+      ),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // App name row
-                AppNameArea(
-                  imagePath: "assets/images/title_area@2x.png",
-                ),
-                // Image row
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+          : RefreshIndicator(
+              displacement: 100.0,
+              onRefresh: loadDataAgain,
+              child: Stack(
+                children: <Widget>[
+                  ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      // App name row
+                      AppNameArea(
+                        imagePath: "assets/images/title_area@2x.png",
+                      ),
+                      // Image row
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15.0),
+                          child: Image.asset('assets/images/image@2x.png'),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      // Parameters row
+
+                      parameterRowBuilder(
+                        "assets/images/icon_1@2x.png",
+                        "Water capacity",
+                        _waterCapacity,
+                        false,
+                        true,
+                        false,
+                        false,
+                      ),
+                      parameterRowBuilder(
+                        "assets/images/icon_2@2x.png",
+                        "Temperature",
+                        _temperture,
+                        false,
+                        false,
+                        true,
+                        false,
+                      ),
+                      parameterRowBuilder(
+                        "assets/images/icon_3@2x.png",
+                        "Clearity",
+                        _clearity,
+                        true,
+                        false,
+                        false,
+                        false,
+                      ),
+                      parameterRowBuilder(
+                        "assets/images/icon_4@2x.png",
+                        "Speed",
+                        _speed,
+                        false,
+                        false,
+                        false,
+                        true,
+                      ),
+                      parameterRowBuilder(
+                        "assets/images/icon_5@2x.png",
+                        "Daily consumption",
+                        _dailyConsumption,
+                        false,
+                        true,
+                        false,
+                        false,
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      // Water pump button row
+                      waterPumpButtonBuilder(),
+                      // Bottom navigation button row
+                      const SizedBox(
+                        height: 30,
                       ),
                     ],
                   ),
-                  margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: Image.asset('assets/images/image@2x.png'),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                // Parameters row
-                parameterRowBuilder(
-                  "assets/images/icon_1@2x.png",
-                  "Water capacity",
-                  _waterCapacity,
-                  false,
-                  true,
-                  false,
-                  false,
-                ),
-                parameterRowBuilder(
-                  "assets/images/icon_2@2x.png",
-                  "Temperature",
-                  _temperture,
-                  false,
-                  false,
-                  true,
-                  false,
-                ),
-                parameterRowBuilder(
-                  "assets/images/icon_3@2x.png",
-                  "Clearity",
-                  _clearity,
-                  true,
-                  false,
-                  false,
-                  false,
-                ),
-                parameterRowBuilder(
-                  "assets/images/icon_4@2x.png",
-                  "Speed",
-                  _speed,
-                  false,
-                  false,
-                  false,
-                  true,
-                ),
-                parameterRowBuilder(
-                  "assets/images/icon_5@2x.png",
-                  "Daily consumption",
-                  _dailyConsumption,
-                  false,
-                  true,
-                  false,
-                  false,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                // Water pump button row
-                waterPumpButtonBuilder(),
-                // Bottom navigation button row
-                const SizedBox(
-                  height: 30,
-                ),
-                // Expanded(
-                //   child: InkWell(
-                //     onTap: () {
-                //       print("Usage per hour button is clicked!");
-                //       Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) => const UsageScreen(),
-                //         ),
-                //       );
-                //     },
-                //     child: Container(
-                //       height: 80,
-                //       color: const Color(0xff383F85),
-                //       child: Row(
-                //         // ignore: prefer_const_literals_to_create_immutables
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         children: [
-                //           const Text(
-                //             "Usage per hour",
-                //             style: TextStyle(
-                //               color: Colors.white,
-                //               fontSize: 16.0,
-                //             ),
-                //           ),
-                //           Container(
-                //             margin: const EdgeInsets.only(left: 8),
-                //             width: 25,
-                //             child: Image.asset('assets/images/history@2x.png'),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // )
-              ],
+                ],
+              ),
             ),
     );
   }
@@ -514,3 +505,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+// class RefreshWidget extends StatefulWidget {
+//   const RefreshWidget({
+//     super.key,
+//     required this.onRefresh,
+//     required this.child,
+//   });
+
+//   final Widget child;
+//   final Future Function() onRefresh;
+
+//   @override
+//   State<RefreshWidget> createState() => _RefreshWidgetState();
+// }
+
+// class _RefreshWidgetState extends State<RefreshWidget> {
+//   @override
+//   Widget build(BuildContext context) => buildAndroidData();
+
+//   Widget buildAndroidData() => RefreshIndicator(
+//         onRefresh: widget.onRefresh,
+//         child: widget.child,
+//       );
+// }
