@@ -187,6 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CircularProgressIndicator(),
             )
           : Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 // App name row
                 AppNameArea(
@@ -276,41 +277,41 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      print("Usage per hour button is clicked!");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const UsageScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      height: 80,
-                      color: const Color(0xff383F85),
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Usage per hour",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 8),
-                            width: 25,
-                            child: Image.asset('assets/images/history@2x.png'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
+                // Expanded(
+                //   child: InkWell(
+                //     onTap: () {
+                //       print("Usage per hour button is clicked!");
+                //       Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => const UsageScreen(),
+                //         ),
+                //       );
+                //     },
+                //     child: Container(
+                //       height: 80,
+                //       color: const Color(0xff383F85),
+                //       child: Row(
+                //         // ignore: prefer_const_literals_to_create_immutables
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           const Text(
+                //             "Usage per hour",
+                //             style: TextStyle(
+                //               color: Colors.white,
+                //               fontSize: 16.0,
+                //             ),
+                //           ),
+                //           Container(
+                //             margin: const EdgeInsets.only(left: 8),
+                //             width: 25,
+                //             child: Image.asset('assets/images/history@2x.png'),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // )
               ],
             ),
     );
